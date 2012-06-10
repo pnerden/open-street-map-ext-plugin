@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>http://lsp.org/tld/osm</taglib-uri>
+			<taglib-location>/WEB-INF/tld/osm.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+	<servlet>
+		<servlet-name>OSM JSON Servlet</servlet-name>
+		<servlet-class>org.lsp.liferay.ext.osm.servlet.OSMJSONServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OSM JSON Servlet</servlet-name>
+		<url-pattern>/api/osm/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

@@ -1,0 +1,22 @@
+div.osm-global {
+	background-color:	white;
+	border:				black 3px ridge;
+}
+
+div.osm-navigation .aui-column, div.osm-mapSearch {
+	padding:			5px;
+}
+
+div.osm-mapView {
+	border-right:		black 2px dashed;
+	text-align:			center;
+	font-style:			italic;
+}
+
+div.osm-mapSuggestions p {
+	font-weight:		bold;
+}
+
+div.osm-global a:visited {
+	text-decoration:	none;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<taglib
+        version="2.0"
+        xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+> 
+	<tlibversion>1.2</tlibversion> 
+	<jspversion>2.0</jspversion>
+	<shortname>OSMTags</shortname>
+	<uri>http://lsp.org/tld/osm</uri>
+	<info>OSM Tags for Liferay</info>
+
+	<tag> 
+		<name>map</name> 
+		<tagclass>org.lsp.liferay.ext.osm.taglib.OSMMapTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>Full featured Map for Liferay</info> 
+
+		<attribute>
+			<name>occurenceId</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>long</type>
+		</attribute>
+		<attribute>
+			<name>startLatitude</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>startLongitude</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>startZoom</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<dynamic-attributes>true</dynamic-attributes>
+	</tag> 
+</taglib>
