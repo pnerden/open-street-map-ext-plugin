@@ -66,5 +66,39 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<dynamic-attributes>true</dynamic-attributes>
-	</tag> 
+	</tag>
+	<tag> 
+		<name>simplemap</name> 
+		<tagclass>org.lsp.liferay.ext.osm.taglib.OSMSimpleMapTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<info>Simple kinda display-only Map for Liferay</info> 
+
+		<attribute>
+			<name>occurenceId</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>long</type>
+		</attribute>
+		<attribute>
+			<name>startLatitude</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>startLongitude</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>startZoom</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>displayText</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<dynamic-attributes>true</dynamic-attributes>
+	</tag>
 </taglib>

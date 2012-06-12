@@ -17,7 +17,7 @@
  */
 --%>
 
-<%@ include file="/html/taglib/osm/init.jsp" %>
+<%@ include file="/html/taglib/osm/map/init.jsp" %>
 
 <div class="osm-global" id="<%= portletNameSpace%>OSM_<%= occurenceId %>_">
 	<c:if test="<%= (PortalUtil.getUser(request) != null) %>">

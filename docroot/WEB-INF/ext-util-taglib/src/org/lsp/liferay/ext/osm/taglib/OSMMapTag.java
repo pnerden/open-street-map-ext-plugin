@@ -2,15 +2,16 @@ package org.lsp.liferay.ext.osm.taglib;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.lsp.liferay.ext.osm.taglib.util.OSMTaglibConstants;
+
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.taglib.util.IncludeTag;
 
 public class OSMMapTag extends IncludeTag {
 	
 	protected static final String ATTRIBUTE_NAMESPACE = "lsp-osm:map:";
-	protected static final long DEFAULT_OCCURENCE_ID = 0;
-	
-	private long occurenceId = DEFAULT_OCCURENCE_ID;
+		
+	private long occurenceId = OSMTaglibConstants.DEFAULT_OCCURENCE_ID;
 	private String startLatitude = StringPool.BLANK;	
 	private String startLongitude = StringPool.BLANK;
 	private String startZoom = StringPool.BLANK;
@@ -21,7 +22,7 @@ public class OSMMapTag extends IncludeTag {
 	private boolean locationMarkerActive = false;
 	
 	private static final String _PAGE =
-            "/html/taglib/osm/map.jsp";
+            "/html/taglib/osm/map/map.jsp";
 
 	@Override
     protected String getPage() {
@@ -30,7 +31,7 @@ public class OSMMapTag extends IncludeTag {
 	
 	@Override
     protected void cleanUp() {
-            occurenceId = DEFAULT_OCCURENCE_ID;
+            occurenceId = OSMTaglibConstants.DEFAULT_OCCURENCE_ID;
         	startLatitude = StringPool.BLANK;	
         	startLongitude = StringPool.BLANK;
         	startZoom = StringPool.BLANK;
@@ -62,7 +63,9 @@ public class OSMMapTag extends IncludeTag {
 	}
 
 	public void setOccurenceId(long occurenceId) {
-		this.occurenceId = occurenceId;
+		if (startZoom.length() > 0) {
+			this.occurenceId = occurenceId;
+		}
 	}
 
 	public String getStartLatitude() {

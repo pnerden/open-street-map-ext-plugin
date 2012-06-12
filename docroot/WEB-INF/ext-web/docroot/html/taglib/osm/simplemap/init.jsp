@@ -17,9 +17,13 @@
  */
 --%>
 
-<%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
-<%@ page import="com.liferay.portal.util.PortalUtil" %>
+<%@ include file="/html/taglib/osm/init.jsp" %>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%
+String portletNameSpace = (String)request.getAttribute("lsp-osm:simplemap:portletNameSpace");
+String occurenceId = (String)request.getAttribute("lsp-osm:simplemap:occurenceId");
+String startLatitude = (String)request.getAttribute("lsp-osm:simplemap:startLatitude");
+String startLongitude = (String)request.getAttribute("lsp-osm:simplemap:startLongitude");
+String startZoom = (String)request.getAttribute("lsp-osm:simplemap:startZoom");
+String displayText = (String)request.getAttribute("lsp-osm:simplemap:displayText");
+%>

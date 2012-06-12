@@ -55,10 +55,9 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 		this.updateLocationMarkerDisplay(new L.LatLng(startLatitude, startLongitude));
 	};
 	
-	this.addMapSuggestion = function(location) {
+	this.addMapSuggestion = function(text) {
 		var child = document.createElement('p');
-		var anchor = this.buildZoomToAnchor(location, ", ");
-		child.appendChild(anchor);
+		child.appendChild(text);
 		mapSuggestionsDiv.appendChild(child);
 	};
 	
@@ -78,13 +77,12 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 		markerLayer = [];
 	};
 	
-	this.displayMarker = function (location) {
-		var anchor = this.buildZoomToAnchor(location, "<br />");
-		
-		var markerLocation = new L.LatLng(location.lat, location.lng);
+	this.displayMarker = function (text, latitude, longitude) {	
+		var markerLocation = new L.LatLng(latitude, longitude);
 		var marker = new L.Marker(markerLocation);
-		
-		marker.bindPopup(anchor).openPopup();
+		if (text != '') {
+			marker.bindPopup(text).openPopup();
+		}
 		markerLayer.push(marker);
 		map.addLayer(marker);
 	};
@@ -161,8 +159,8 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 		for (var i=0;i<responseData.length;i++) {
 			var location = responseData[i];
 			suggestions[i] = location;
-			this.displayMarker(location);
-			this.addMapSuggestion(location);
+			this.displayMarker(this.buildZoomToAnchor(location, "<br />"), location.lat, location.lng);
+			this.addMapSuggestion(this.buildZoomToAnchor(location, ", "));
 		}
 		var box = suggestions[0].box.split(',');
 		this.zoomTo(box[1], box[2], box[0], box[3]);
@@ -184,17 +182,6 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
     	var bounds = new L.LatLngBounds(southWest, northEast);
 		map.fitBounds(bounds);
 	};
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

@@ -7,10 +7,18 @@ div.osm-navigation .aui-column, div.osm-mapSearch {
 	padding:			5px;
 }
 
+div.osm-mapSearch {
+	text-align:			center;
+}
+
 div.osm-mapView {
 	border-right:		black 2px dashed;
 	text-align:			center;
 	font-style:			italic;
+}
+
+div.osm-mapView .leaflet-container {
+	margin:				auto;
 }
 
 div.osm-mapSuggestions p {

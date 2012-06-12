@@ -1,6 +1,6 @@
-package org.lsp.liferay.ext.osm.util;
+package org.lsp.liferay.ext.osm.taglib.util;
 
-public class OSMConstants {
+public class OSMTaglibConstants {
 
 	public static final String DEFAULT_LATITUDE = "46.935";
 	public static final String DEFAULT_LONGITUDE = "2.55";
@@ -9,5 +9,7 @@ public class OSMConstants {
 	public static final String DEFAULT_LOCATION = "France";
     public static final int ACTION_SEARCHMAP = 1;
     public static final int ACTION_REVERSE_SEARCHMAP = 2;
+    public static final long DEFAULT_OCCURENCE_ID = 0;
+    
 	
 }
