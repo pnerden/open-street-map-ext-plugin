@@ -7,5 +7,6 @@ public class OSMConstants {
 	public static final String DEFAULT_ZOOM = "6";
 	public static final String DEFAULT_LOCATION = "France";
     public static final int ACTION_SEARCHMAP = 1;
+    public static final int ACTION_REVERSE_SEARCHMAP = 2;
 	
 }

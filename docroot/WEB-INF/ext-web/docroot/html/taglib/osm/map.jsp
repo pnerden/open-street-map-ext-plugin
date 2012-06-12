@@ -20,6 +20,7 @@
 <%@ include file="/html/taglib/osm/init.jsp" %>
 
 <div class="osm-global" id="<%= portletNameSpace%>OSM_<%= occurenceId %>_">
+	<c:if test="<%= (PortalUtil.getUser(request) != null) %>">
 	<aui:layout cssClass="osm-mapSearch">
 		<aui:column columnWidth="50" first="true">
 			<input type="text" id="<%= portletNameSpace%>MapSearch_<%= occurenceId %>_" value="" /> <button name="<%= portletNameSpace%>SearchMap_<%= occurenceId %>_" type="button" onClick="<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.meetupsMapSearch()"><%= LanguageUtil.get(pageContext, "search") %></button>
@@ -27,8 +28,16 @@
 		<aui:column columnWidth="50" last="true">
 		</aui:column>
 	</aui:layout>
+	</c:if>
 	<aui:layout cssClass="osm-navigation">
 		<aui:column cssClass="osm-mapView" columnWidth="50" first="true">
+		<%
+		if (locationMarkerActive) {
+		%>
+			<p><liferay-ui:message key="doubleclick-the-map-or-drag-the-flag-to-set-location" /></p>
+		<%
+		}
+		%>
 			<div id="<%= portletNameSpace%>map_<%= occurenceId %>_" style="width:256px;height:256px;"></div>
 			<p>Map data &#169; OpenStreetMap contributors<br />Nominatim Search Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>
 		</aui:column>
@@ -41,6 +50,131 @@
 
 <script>
 
-	<%= portletNameSpace%>OSMMap_<%= occurenceId %>_ = new OSMMap("<%= portletNameSpace%>", "<%= occurenceId %>", "<%= startLatitude %>", "<%= startLongitude %>", "<%= startZoom %>");
+	// Create Map Manager Object (OSMMap) instance
+	<%= portletNameSpace%>OSMMap_<%= occurenceId %>_ = new OSMMap('<%= portletNameSpace%>', '<%= occurenceId %>', '<%= startLatitude %>', '<%= startLongitude %>', '<%= startZoom %>');
+	
+	// Location Marker is not activated by default. Activate it if required by the tag.
+	<%
+	if (locationMarkerActive) {
+	%>
+		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.activateLocationMarker();
+	<%
+	}
+	%>
+	
+	// Activate the event DoubleClick on the Map
+	<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('dblclick', function(event) {
+		<%= portletNameSpace%>updateLocationDependencies(event.latlng, event);
+	});
+	
+	// Activate the event ZoomEnd on the Map
+	<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('zoomend', function(event) {
+		<%
+		if (locationMarkerActive) {
+		%>
+			// Use Marker as Reference
+			<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().getLatLng(), event);
+		<%
+		} else {
+		%>
+			// Use Map center as Reference
+			<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().getCenter(), event);
+		<%
+		}
+		%>
+	});
+	
+	// Activate the event Change on the Location Field if Binded
+	<%
+	if (locationLocationFieldIdBind != "") {
+		%>
+		
+		AUI().use('event', 'node', function(A) {
+			A.one('#<%= locationLocationFieldIdBind  %>').on('change', function() {
+				if (document.getElementById('<%= locationLocationFieldIdBind  %>').value != <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarkerContent()) {
+					<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.unbindLocationField();
+				}
+			});
+		});
+	
+	<%
+	}
+	%>
+	
+	<%
+	if (locationMarkerActive) {
+		%>
+		// Activate the event DragEnd on the Marker if it is active
+		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().on('dragend', function(event) {
+			<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().getLatLng(), event);
+		});
+	<%
+	}
+		%>
+			
+						
+	function <%= portletNameSpace%>updateLocationDependencies(latlng, event) {
+		
+		<%
+		if (locationMarkerActive) {
+		%>	
+			if (event.type != 'zoomend') {
+				<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.updateLocationMarkerDisplay(latlng);
+			}
+		<%
+		}
+		%>
+				
+		// Update bindings for Latitude and Longitude Fields if asked by taglib 
+		<%
+			if ((locationLatitudeFieldIdBind != "") && (locationLongitudeFieldIdBind != "")) {
+				%>
+				
+				<%
+				if (locationMarkerActive) {
+				%>	
+				
+					document.getElementById('<%= locationLatitudeFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMarkerLatitude();
+					document.getElementById('<%= locationLongitudeFieldIdBind %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMarkerLongitude();
+				<%
+				} else {
+				%>
+					document.getElementById('<%= locationLatitudeFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenterLatitude();
+					document.getElementById('<%= locationLongitudeFieldIdBind %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenterLongitude();
+				<%
+				}
+			}
+		%>
+		
+		// Update bindings for Zoom Field if asked by taglib 
+		<%
+			if (locationZoomFieldIdBind != "") {
+				%>
+				document.getElementById('<%= locationZoomFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getZoom();
+				<%
+			}
+		%>
+		
+		// Update bindings for Location Field if asked by taglib 
+		<%		
+			if (locationLocationFieldIdBind != "") {
+				%>
+				if (<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationLocationFieldBind()) {
+					<%
+					if (locationMarkerActive) {
+					%>
+						document.getElementById('<%= locationLocationFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarkerContent();
+					<%
+					} else {
+					%>
+						document.getElementById('<%= locationLocationFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.meetupsMapReverseSearch(latlng, ', ');
+					<%
+					}
+					%>
+				}
+				<%
+			}
+		%>
+	};
 	
 </script>

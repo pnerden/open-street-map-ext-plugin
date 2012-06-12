@@ -18,8 +18,11 @@
 --%>
 
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
+<%@ page import="com.liferay.portal.util.PortalUtil" %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%
 String portletNameSpace = (String)request.getAttribute("lsp-osm:map:portletNameSpace");
@@ -27,4 +30,9 @@ String occurenceId = (String)request.getAttribute("lsp-osm:map:occurenceId");
 String startLatitude = (String)request.getAttribute("lsp-osm:map:startLatitude");
 String startLongitude = (String)request.getAttribute("lsp-osm:map:startLongitude");
 String startZoom = (String)request.getAttribute("lsp-osm:map:startZoom");
+String locationLatitudeFieldIdBind = (String)request.getAttribute("lsp-osm:map:locationLatitudeFieldIdBind");
+String locationLongitudeFieldIdBind = (String)request.getAttribute("lsp-osm:map:locationLongitudeFieldIdBind");
+String locationZoomFieldIdBind = (String)request.getAttribute("lsp-osm:map:locationZoomFieldIdBind");
+String locationLocationFieldIdBind = (String)request.getAttribute("lsp-osm:map:locationLocationFieldIdBind");
+boolean locationMarkerActive = Boolean.parseBoolean((String)request.getAttribute("lsp-osm:map:locationMarkerActive"));
 %>

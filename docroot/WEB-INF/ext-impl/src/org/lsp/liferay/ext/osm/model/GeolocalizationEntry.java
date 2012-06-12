@@ -5,25 +5,18 @@ import com.liferay.portal.kernel.json.JSONObject;
 
 public class GeolocalizationEntry {
 	
-	public String query;
 	public String latitude;
 	public String longitude;
 	public String boundingbox;
 	public String road;
 	public String zipcode;
 	public String city;
+	public String city_district;
 	public String county;
 	public String state;
 	public String country;
 	
 	
-	
-	public String getQuery() {
-		return query;
-	}
-	public void setQuery(String query) {
-		this.query = query;
-	}
 	public String getLatitude() {
 		return latitude;
 	}
@@ -60,6 +53,12 @@ public class GeolocalizationEntry {
 	public void setCity(String city) {
 		this.city = city;
 	}
+	public String getCity_district() {
+		return city_district;
+	}
+	public void setCity_district(String city_district) {
+		this.city_district = city_district;
+	}
 	public String getCounty() {
 		return county;
 	}
@@ -86,6 +85,7 @@ public class GeolocalizationEntry {
 		jsonObject.put("box", this.getBoundingbox());
 		jsonObject.put("road", this.getRoad());
 		jsonObject.put("city", this.getCity());
+		jsonObject.put("city_district", this.getCity_district());
 		jsonObject.put("county", this.getCounty());
 		jsonObject.put("state", this.getState());
 		jsonObject.put("zipcode", this.getZipcode());

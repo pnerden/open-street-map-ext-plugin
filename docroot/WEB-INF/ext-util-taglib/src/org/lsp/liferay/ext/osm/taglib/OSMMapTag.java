@@ -14,6 +14,11 @@ public class OSMMapTag extends IncludeTag {
 	private String startLatitude = StringPool.BLANK;	
 	private String startLongitude = StringPool.BLANK;
 	private String startZoom = StringPool.BLANK;
+	private String locationLatitudeFieldIdBind = StringPool.BLANK;
+	private String locationLongitudeFieldIdBind = StringPool.BLANK;
+	private String locationZoomFieldIdBind = StringPool.BLANK;
+	private String locationLocationFieldIdBind = StringPool.BLANK;
+	private boolean locationMarkerActive = false;
 	
 	private static final String _PAGE =
             "/html/taglib/osm/map.jsp";
@@ -29,6 +34,11 @@ public class OSMMapTag extends IncludeTag {
         	startLatitude = StringPool.BLANK;	
         	startLongitude = StringPool.BLANK;
         	startZoom = StringPool.BLANK;
+        	locationLatitudeFieldIdBind = StringPool.BLANK;
+        	locationLongitudeFieldIdBind = StringPool.BLANK;
+        	locationZoomFieldIdBind = StringPool.BLANK;
+        	locationLocationFieldIdBind = StringPool.BLANK;
+        	locationMarkerActive = false;
     }
 
 	@Override
@@ -38,6 +48,11 @@ public class OSMMapTag extends IncludeTag {
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startLatitude",String.valueOf(startLatitude));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startLongitude",String.valueOf(startLongitude));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startZoom",String.valueOf(startZoom));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationLatitudeFieldIdBind",String.valueOf(locationLatitudeFieldIdBind));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationLongitudeFieldIdBind",String.valueOf(locationLongitudeFieldIdBind));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationZoomFieldIdBind",String.valueOf(locationZoomFieldIdBind));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationLocationFieldIdBind",String.valueOf(locationLocationFieldIdBind));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationMarkerActive",String.valueOf(locationMarkerActive));
 	}
 
 
@@ -72,6 +87,46 @@ public class OSMMapTag extends IncludeTag {
 
 	public void setStartZoom(String startZoom) {
 		this.startZoom = startZoom;
+	}
+
+	public String getLocationLatitudeFieldIdBind() {
+		return locationLatitudeFieldIdBind;
+	}
+
+	public void setLocationLatitudeFieldIdBind(String locationLatitudeFieldIdBind) {
+		this.locationLatitudeFieldIdBind = locationLatitudeFieldIdBind;
+	}
+
+	public String getLocationLongitudeFieldIdBind() {
+		return locationLongitudeFieldIdBind;
+	}
+
+	public void setLocationLongitudeFieldIdBind(String locationLongitudeFieldIdBind) {
+		this.locationLongitudeFieldIdBind = locationLongitudeFieldIdBind;
+	}
+	
+	public String getLocationZoomFieldIdBind() {
+		return locationZoomFieldIdBind;
+	}
+
+	public void setLocationZoomFieldIdBind(String locationZoomFieldIdBind) {
+		this.locationZoomFieldIdBind = locationZoomFieldIdBind;
+	}
+
+	public String getLocationLocationFieldIdBind() {
+		return locationLocationFieldIdBind;
+	}
+
+	public void setLocationLocationFieldIdBind(String locationLocationFieldIdBind) {
+		this.locationLocationFieldIdBind = locationLocationFieldIdBind;
+	}
+
+	public boolean isLocationMarkerActive() {
+		return locationMarkerActive;
+	}
+
+	public void setLocationMarkerActive(boolean locationMarkerActive) {
+		this.locationMarkerActive = locationMarkerActive;
 	}
 	
 	
