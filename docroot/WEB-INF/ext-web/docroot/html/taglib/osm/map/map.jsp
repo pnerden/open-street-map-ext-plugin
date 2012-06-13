@@ -38,7 +38,7 @@
 		<%
 		}
 		%>
-			<div id="<%= portletNameSpace%>map_<%= occurenceId %>_" style="width:256px;height:256px;"></div>
+			<div id="<%= portletNameSpace%>map_<%= occurenceId %>_" style="width:<%= mapWidth%>px;height:<%= mapHeight%>px;"></div>
 			<p>Map data &#169; OpenStreetMap contributors<br />Nominatim Search Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>
 		</aui:column>
 		<aui:column cssClass="osm-mapSuggestions" columnWidth="45" last="true">

@@ -15,6 +15,8 @@ public class OSMMapTag extends IncludeTag {
 	private String startLatitude = StringPool.BLANK;	
 	private String startLongitude = StringPool.BLANK;
 	private String startZoom = StringPool.BLANK;
+	private long mapWidth = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
+	private long mapHeight = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
 	private String locationLatitudeFieldIdBind = StringPool.BLANK;
 	private String locationLongitudeFieldIdBind = StringPool.BLANK;
 	private String locationZoomFieldIdBind = StringPool.BLANK;
@@ -35,6 +37,8 @@ public class OSMMapTag extends IncludeTag {
         	startLatitude = StringPool.BLANK;	
         	startLongitude = StringPool.BLANK;
         	startZoom = StringPool.BLANK;
+        	mapWidth = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
+        	mapHeight = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
         	locationLatitudeFieldIdBind = StringPool.BLANK;
         	locationLongitudeFieldIdBind = StringPool.BLANK;
         	locationZoomFieldIdBind = StringPool.BLANK;
@@ -49,6 +53,8 @@ public class OSMMapTag extends IncludeTag {
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startLatitude",String.valueOf(startLatitude));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startLongitude",String.valueOf(startLongitude));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startZoom",String.valueOf(startZoom));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"mapWidth",String.valueOf(mapWidth));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"mapHeight",String.valueOf(mapHeight));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationLatitudeFieldIdBind",String.valueOf(locationLatitudeFieldIdBind));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationLongitudeFieldIdBind",String.valueOf(locationLongitudeFieldIdBind));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationZoomFieldIdBind",String.valueOf(locationZoomFieldIdBind));
@@ -90,6 +96,22 @@ public class OSMMapTag extends IncludeTag {
 
 	public void setStartZoom(String startZoom) {
 		this.startZoom = startZoom;
+	}
+
+	public long getMapWidth() {
+		return mapWidth;
+	}
+
+	public void setMapWidth(long mapWidth) {
+		this.mapWidth = mapWidth;
+	}
+
+	public long getMapHeight() {
+		return mapHeight;
+	}
+
+	public void setMapHeight(long mapHeight) {
+		this.mapHeight = mapHeight;
 	}
 
 	public String getLocationLatitudeFieldIdBind() {

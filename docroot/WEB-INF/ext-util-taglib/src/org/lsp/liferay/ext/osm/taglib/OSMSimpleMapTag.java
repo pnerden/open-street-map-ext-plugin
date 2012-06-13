@@ -16,6 +16,8 @@ public class OSMSimpleMapTag extends IncludeTag {
 	private String startLatitude = StringPool.BLANK;	
 	private String startLongitude = StringPool.BLANK;
 	private String startZoom = OSMTaglibConstants.DEFAULT_VIEW_ZOOM;
+	private long mapWidth = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
+	private long mapHeight = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
 	private String displayText = StringPool.BLANK;
 	
 	private static final String _PAGE =
@@ -32,6 +34,8 @@ public class OSMSimpleMapTag extends IncludeTag {
         	startLatitude = StringPool.BLANK;	
         	startLongitude = StringPool.BLANK;
         	startZoom = OSMTaglibConstants.DEFAULT_VIEW_ZOOM;
+        	mapWidth = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
+        	mapHeight = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
         	displayText = StringPool.BLANK;
     }
 
@@ -42,6 +46,8 @@ public class OSMSimpleMapTag extends IncludeTag {
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startLatitude",String.valueOf(startLatitude));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startLongitude",String.valueOf(startLongitude));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"startZoom",String.valueOf(startZoom));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"mapWidth",String.valueOf(mapWidth));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"mapHeight",String.valueOf(mapHeight));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"displayText",String.valueOf(displayText));
 	}
 
@@ -81,6 +87,22 @@ public class OSMSimpleMapTag extends IncludeTag {
 		if (startZoom.length() > 0) {
 			this.startZoom = startZoom;
 		}		
+	}
+
+	public long getMapWidth() {
+		return mapWidth;
+	}
+
+	public void setMapWidth(long mapWidth) {
+		this.mapWidth = mapWidth;
+	}
+
+	public long getMapHeight() {
+		return mapHeight;
+	}
+
+	public void setMapHeight(long mapHeight) {
+		this.mapHeight = mapHeight;
 	}
 
 	public String getDisplayText() {

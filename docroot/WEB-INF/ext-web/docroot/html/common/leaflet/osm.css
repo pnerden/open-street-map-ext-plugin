@@ -17,6 +17,10 @@ div.osm-mapView {
 	font-style:			italic;
 }
 
+div.osm-simplemapView {
+	border-right:		black 0px dashed;
+}
+
 div.osm-mapView .leaflet-container {
 	margin:				auto;
 }

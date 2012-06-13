@@ -25,5 +25,7 @@ String occurenceId = (String)request.getAttribute("lsp-osm:simplemap:occurenceId
 String startLatitude = (String)request.getAttribute("lsp-osm:simplemap:startLatitude");
 String startLongitude = (String)request.getAttribute("lsp-osm:simplemap:startLongitude");
 String startZoom = (String)request.getAttribute("lsp-osm:simplemap:startZoom");
+String mapWidth = (String)request.getAttribute("lsp-osm:simplemap:mapWidth");
+String mapHeight = (String)request.getAttribute("lsp-osm:simplemap:mapHeight");
 String displayText = (String)request.getAttribute("lsp-osm:simplemap:displayText");
 %>

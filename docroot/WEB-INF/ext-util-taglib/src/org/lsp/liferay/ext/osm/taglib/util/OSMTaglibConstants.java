@@ -10,6 +10,8 @@ public class OSMTaglibConstants {
     public static final int ACTION_SEARCHMAP = 1;
     public static final int ACTION_REVERSE_SEARCHMAP = 2;
     public static final long DEFAULT_OCCURENCE_ID = 0;
+    public static final long DEFAULT_MAP_WIDTH = 256;
+    public static final long DEFAULT_MAP_HEIGHT = 256;
     
 	
 }
