@@ -22,7 +22,7 @@
 <c:if test="<%=((startLatitude.length() > 0) && (startLongitude.length() > 0)) %>">
 	<div class="osm-global" id="<%= portletNameSpace%>OSM_<%= occurenceId %>_">
 		<aui:layout cssClass="osm-navigation">
-			<aui:column cssClass="osm-mapView,osm-simplemapView" columnWidth="100" first="true">
+			<aui:column cssClass="osm-mapView osm-simplemapView" columnWidth="100" first="true">
 				<div id="<%= portletNameSpace%>map_<%= occurenceId %>_" style="width:<%= mapWidth%>px;height:<%= mapHeight%>px;"></div>
 				<p>Map data &#169; OpenStreetMap contributors<br />Nominatim Search Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>
 			</aui:column>
