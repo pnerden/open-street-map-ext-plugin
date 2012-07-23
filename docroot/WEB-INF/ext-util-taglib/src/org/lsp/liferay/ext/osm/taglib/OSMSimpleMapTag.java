@@ -1,7 +1,11 @@
 package org.lsp.liferay.ext.osm.taglib;
 
+import java.util.List;
+import java.util.Vector;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.lsp.liferay.ext.osm.model.GeolocalizationPlot;
 import org.lsp.liferay.ext.osm.taglib.util.OSMTaglibConstants;
 
 import com.liferay.portal.kernel.util.StringPool;
@@ -19,6 +23,7 @@ public class OSMSimpleMapTag extends IncludeTag {
 	private long mapWidth = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
 	private long mapHeight = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
 	private String displayText = StringPool.BLANK;
+	private List<GeolocalizationPlot> plotList = new Vector<GeolocalizationPlot>();
 	
 	private static final String _PAGE =
             "/html/taglib/osm/simplemap/simplemap.jsp";
@@ -37,6 +42,7 @@ public class OSMSimpleMapTag extends IncludeTag {
         	mapWidth = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
         	mapHeight = OSMTaglibConstants.DEFAULT_MAP_WIDTH;
         	displayText = StringPool.BLANK;
+        	plotList = new Vector<GeolocalizationPlot>();
     }
 
 	@Override
@@ -49,6 +55,7 @@ public class OSMSimpleMapTag extends IncludeTag {
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"mapWidth",String.valueOf(mapWidth));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"mapHeight",String.valueOf(mapHeight));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"displayText",String.valueOf(displayText));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"plotList",plotList);
 	}
 
 
@@ -111,6 +118,14 @@ public class OSMSimpleMapTag extends IncludeTag {
 
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
+	}
+
+	public List<GeolocalizationPlot> getPlotList() {
+		return plotList;
+	}
+
+	public void setPlotList(List<GeolocalizationPlot> plotList) {
+		this.plotList = plotList;
 	}
 
 }

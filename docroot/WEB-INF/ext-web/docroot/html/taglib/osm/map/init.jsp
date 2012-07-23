@@ -32,4 +32,5 @@ String locationLongitudeFieldIdBind = (String)request.getAttribute("lsp-osm:map:
 String locationZoomFieldIdBind = (String)request.getAttribute("lsp-osm:map:locationZoomFieldIdBind");
 String locationLocationFieldIdBind = (String)request.getAttribute("lsp-osm:map:locationLocationFieldIdBind");
 boolean locationMarkerActive = Boolean.parseBoolean((String)request.getAttribute("lsp-osm:map:locationMarkerActive"));
+Vector<GeolocalizationPlot> plotList = (Vector<GeolocalizationPlot>)request.getAttribute("lsp-osm:map:plotList");
 %>

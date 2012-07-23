@@ -28,4 +28,5 @@ String startZoom = (String)request.getAttribute("lsp-osm:simplemap:startZoom");
 String mapWidth = (String)request.getAttribute("lsp-osm:simplemap:mapWidth");
 String mapHeight = (String)request.getAttribute("lsp-osm:simplemap:mapHeight");
 String displayText = (String)request.getAttribute("lsp-osm:simplemap:displayText");
+Vector<GeolocalizationPlot> plotList = (Vector<GeolocalizationPlot>)request.getAttribute("lsp-osm:map:plotList");
 %>

@@ -1,7 +1,11 @@
 package org.lsp.liferay.ext.osm.taglib;
 
+import java.util.List;
+import java.util.Vector;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.lsp.liferay.ext.osm.model.GeolocalizationPlot;
 import org.lsp.liferay.ext.osm.taglib.util.OSMTaglibConstants;
 
 import com.liferay.portal.kernel.util.StringPool;
@@ -22,6 +26,7 @@ public class OSMMapTag extends IncludeTag {
 	private String locationZoomFieldIdBind = StringPool.BLANK;
 	private String locationLocationFieldIdBind = StringPool.BLANK;
 	private boolean locationMarkerActive = false;
+	private List<GeolocalizationPlot> plotList = new Vector<GeolocalizationPlot>();
 	
 	private static final String _PAGE =
             "/html/taglib/osm/map/map.jsp";
@@ -44,6 +49,7 @@ public class OSMMapTag extends IncludeTag {
         	locationZoomFieldIdBind = StringPool.BLANK;
         	locationLocationFieldIdBind = StringPool.BLANK;
         	locationMarkerActive = false;
+        	plotList = new Vector<GeolocalizationPlot>();
     }
 
 	@Override
@@ -60,6 +66,7 @@ public class OSMMapTag extends IncludeTag {
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationZoomFieldIdBind",String.valueOf(locationZoomFieldIdBind));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationLocationFieldIdBind",String.valueOf(locationLocationFieldIdBind));
 		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"locationMarkerActive",String.valueOf(locationMarkerActive));
+		setNamespacedAttribute(request, ATTRIBUTE_NAMESPACE+"plotList",plotList);
 	}
 
 
@@ -152,6 +159,14 @@ public class OSMMapTag extends IncludeTag {
 
 	public void setLocationMarkerActive(boolean locationMarkerActive) {
 		this.locationMarkerActive = locationMarkerActive;
+	}
+
+	public List<GeolocalizationPlot> getPlotList() {
+		return plotList;
+	}
+
+	public void setPlotList(List<GeolocalizationPlot> plotList) {
+		this.plotList = plotList;
 	}
 	
 	

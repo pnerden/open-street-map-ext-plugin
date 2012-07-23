@@ -77,6 +77,12 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>plotList</name>
+			<type>java.util.List</type>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 	<tag> 
@@ -120,6 +126,12 @@
 		</attribute>
 		<attribute>
 			<name>displayText</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>plotList</name>
+			<type>java.util.List</type>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

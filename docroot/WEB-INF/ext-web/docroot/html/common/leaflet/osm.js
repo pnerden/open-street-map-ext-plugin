@@ -5,6 +5,24 @@ var FlagIcon = L.Icon.extend({
     popupAnchor: new L.Point(0, -40)
 });
 
+var PlotIcon = L.Icon.extend({
+    iconUrl: '/html/common/leaflet/images/marker.png',
+    shadowUrl: '/html/common/leaflet/images/marker-shadow.png',
+    iconSize: new L.Point(25, 41),
+    shadowSize:	new L.Point(41, 41),
+    iconAnchor: new L.Point(13, 41),
+	popupAnchor: new L.Point(0, -33)
+});
+
+var SearchIcon = L.Icon.extend({
+    iconUrl: '/html/common/leaflet/images/search-marker.png',
+    shadowUrl: '/html/common/leaflet/images/marker-shadow.png',
+    iconSize: new L.Point(25, 41),
+    shadowSize:	new L.Point(41, 41),
+    iconAnchor: new L.Point(13, 41),
+	popupAnchor: new L.Point(0, -33)
+});
+
 OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, startZoom) {
 	
 	var map;
@@ -18,7 +36,8 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 	
 	var locationMarker;
 	var locationMarkerContent;
-	var markerLayer;
+	var searchMarkerLayer;
+	var plotMarkerLayer;
 	var suggestions;
 	
 	var locationLocationFieldBind;
@@ -39,7 +58,8 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 		osmUrl='http://otile4.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
 		osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: ""});
 		
-		markerLayer = new Array();
+		searchMarkerLayer = new Array();
+		plotMarkerLayer = new Array();
 		suggestions = new Array();
 		
 		// Fire in the hole !!
@@ -70,21 +90,40 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 		}
 	};
 	
-	this.clearMarkers = function() {
-		for (var i=0;i<markerLayer.length;i++) {
-			map.removeLayer(markerLayer[i]);
+	this.clearSearchMarkers = function() {
+		for (var i=0;i<searchMarkerLayer.length;i++) {
+			map.removeLayer(searchMarkerLayer[i]);
 		}
-		markerLayer = [];
+		searchMarkerLayer = [];
 	};
 	
-	this.displayMarker = function (text, latitude, longitude) {	
-		var markerLocation = new L.LatLng(latitude, longitude);
-		var marker = new L.Marker(markerLocation);
+	this.displaySearchMarker = function (text, latitude, longitude) {
+		var marker = new L.Marker(new L.LatLng(latitude, longitude), {icon: new SearchIcon(), draggable: false});
 		if (text != '') {
 			marker.bindPopup(text).openPopup();
 		}
-		markerLayer.push(marker);
+		searchMarkerLayer.push(marker);
 		map.addLayer(marker);
+	};
+	
+	this.clearPlotMarkers = function() {
+		for (var i=0;i<plotMarkerLayer.length;i++) {
+			map.removeLayer(plotMarkerLayer[i]);
+		}
+		plotMarkerLayer = [];
+	};
+	
+	this.displayPlotMarker = function (text, latitude, longitude) {	
+		var marker = new L.Marker(new L.LatLng(latitude, longitude), {icon: new PlotIcon(), draggable: false});
+		if (text != '') {
+			marker.bindPopup(text).openPopup();
+		}
+		plotMarkerLayer.push(marker);
+		map.addLayer(marker);
+	};
+	
+	this.getCenter = function() {
+		return map.getCenter();
 	};
 	
 	this.getCenterLatitude = function() {
@@ -154,12 +193,12 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 	};
 	
 	this.meetupsMapSearchSuccess = function(responseData) {
-		this.clearMarkers();
+		this.clearSearchMarkers();
 		this.clearMapSuggestions();
 		for (var i=0;i<responseData.length;i++) {
 			var location = responseData[i];
 			suggestions[i] = location;
-			this.displayMarker(this.buildZoomToAnchor(location, "<br />"), location.lat, location.lng);
+			this.displaySearchMarker(this.buildZoomToAnchor(location, "<br />"), location.lat, location.lng);
 			this.addMapSuggestion(this.buildZoomToAnchor(location, ", "));
 		}
 		var box = suggestions[0].box.split(',');

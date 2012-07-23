@@ -62,27 +62,119 @@
 	}
 	%>
 	
-	// Activate the event DoubleClick on the Map
-	<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('dblclick', function(event) {
-		<%= portletNameSpace%>updateLocationDependencies(event.latlng, event);
-	});
-	
-	// Activate the event ZoomEnd on the Map
-	<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('zoomend', function(event) {
+	// Never activate binding function if not required
+	<%
+	if ((locationLatitudeFieldIdBind != "") || (locationLongitudeFieldIdBind != "") || (locationZoomFieldIdBind != "")) {
+	%>
+		// Activate the event DoubleClick on the Map
+		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('dblclick', function(event) {
+			<%= portletNameSpace%>updateLocationDependencies(event.latlng, event);
+		});
+		
+		// Activate the event ZoomEnd on the Map
+		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('zoomend', function(event) {
+			<%
+			if (locationMarkerActive) {
+			%>
+				// Use Marker as Reference
+				<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().getLatLng(), event);
+			<%
+			} else {
+			%>
+				// Use Map center as Reference
+				<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenter(), event);
+			<%
+			}
+			%>
+		});
+		
+		// Activate the event DragEnd on the Marker if it is active
 		<%
 		if (locationMarkerActive) {
-		%>
-			// Use Marker as Reference
-			<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().getLatLng(), event);
+			%>
+			
+			<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().on('dragend', function(event) {
+				<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().getLatLng(), event);
+			});
 		<%
 		} else {
-		%>
-			// Use Map center as Reference
-			<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().getCenter(), event);
+			%>
+			
+			<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('mousemove', function(event) {
+				<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenter(), event);
+			});
+			
 		<%
 		}
 		%>
-	});
+		
+		function <%= portletNameSpace%>updateLocationDependencies(latlng, event) {
+			
+			<%
+			if (locationMarkerActive) {
+			%>	
+				if (event.type != 'zoomend') {
+					<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.updateLocationMarkerDisplay(latlng);
+				}
+			<%
+			}
+			%>
+					
+			// Update bindings for Latitude and Longitude Fields if asked by taglib 
+			<%
+				if ((locationLatitudeFieldIdBind != "") && (locationLongitudeFieldIdBind != "")) {
+					%>
+					
+					<%
+					if (locationMarkerActive) {
+					%>	
+					
+						document.getElementById('<%= locationLatitudeFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMarkerLatitude();
+						document.getElementById('<%= locationLongitudeFieldIdBind %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMarkerLongitude();
+					<%
+					} else {
+					%>
+						document.getElementById('<%= locationLatitudeFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenterLatitude();
+						document.getElementById('<%= locationLongitudeFieldIdBind %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenterLongitude();
+					<%
+					}
+				}
+			%>
+			
+			// Update bindings for Zoom Field if asked by taglib 
+			<%
+				if (locationZoomFieldIdBind != "") {
+					%>
+					document.getElementById('<%= locationZoomFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getZoom();
+					<%
+				}
+			%>
+			
+			// Update bindings for Location Field if asked by taglib 
+			<%		
+				if (locationLocationFieldIdBind != "") {
+					%>
+					if (<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationLocationFieldBind()) {
+						<%
+						if (locationMarkerActive) {
+						%>
+							document.getElementById('<%= locationLocationFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarkerContent();
+						<%
+						} else {
+						%>
+							document.getElementById('<%= locationLocationFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.meetupsMapReverseSearch(latlng, ', ');
+						<%
+						}
+						%>
+					}
+					<%
+				}
+			%>
+		};
+		
+	<%
+	}
+	%>
 	
 	// Activate the event Change on the Location Field if Binded
 	<%
@@ -101,80 +193,17 @@
 	}
 	%>
 	
+	// Add plots if available
 	<%
-	if (locationMarkerActive) {
-		%>
-		// Activate the event DragEnd on the Marker if it is active
-		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().on('dragend', function(event) {
-			<%= portletNameSpace%>updateLocationDependencies(<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarker().getLatLng(), event);
-		});
-	<%
-	}
-		%>
-			
-						
-	function <%= portletNameSpace%>updateLocationDependencies(latlng, event) {
-		
-		<%
-		if (locationMarkerActive) {
-		%>	
-			if (event.type != 'zoomend') {
-				<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.updateLocationMarkerDisplay(latlng);
-			}
-		<%
+	if ((plotList != null) && (plotList.size() > 0)) {
+		Iterator<GeolocalizationPlot> iter = plotList.iterator();
+		while (iter.hasNext()) {
+			GeolocalizationPlot plot = iter.next();
+			%>
+			<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.displayPlotMarker('<%= plot.getDescription() %>', '<%= plot.getLatitude() %>', '<%= plot.getLongitude() %>');
+			<%
 		}
-		%>
-				
-		// Update bindings for Latitude and Longitude Fields if asked by taglib 
-		<%
-			if ((locationLatitudeFieldIdBind != "") && (locationLongitudeFieldIdBind != "")) {
-				%>
-				
-				<%
-				if (locationMarkerActive) {
-				%>	
-				
-					document.getElementById('<%= locationLatitudeFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMarkerLatitude();
-					document.getElementById('<%= locationLongitudeFieldIdBind %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMarkerLongitude();
-				<%
-				} else {
-				%>
-					document.getElementById('<%= locationLatitudeFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenterLatitude();
-					document.getElementById('<%= locationLongitudeFieldIdBind %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getCenterLongitude();
-				<%
-				}
-			}
-		%>
-		
-		// Update bindings for Zoom Field if asked by taglib 
-		<%
-			if (locationZoomFieldIdBind != "") {
-				%>
-				document.getElementById('<%= locationZoomFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getZoom();
-				<%
-			}
-		%>
-		
-		// Update bindings for Location Field if asked by taglib 
-		<%		
-			if (locationLocationFieldIdBind != "") {
-				%>
-				if (<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationLocationFieldBind()) {
-					<%
-					if (locationMarkerActive) {
-					%>
-						document.getElementById('<%= locationLocationFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getLocationMarkerContent();
-					<%
-					} else {
-					%>
-						document.getElementById('<%= locationLocationFieldIdBind  %>').value = <%= portletNameSpace%>OSMMap_<%= occurenceId %>_.meetupsMapReverseSearch(latlng, ', ');
-					<%
-					}
-					%>
-				}
-				<%
-			}
-		%>
-	};
+	}
+	%>
 	
 </script>

@@ -17,8 +17,14 @@
  */
 --%>
 
+<%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Vector" %>
+
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
+
+<%@ page import="org.lsp.liferay.ext.osm.model.GeolocalizationPlot" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>

@@ -33,7 +33,20 @@
 	
 		// Create Map Manager Object (OSMMap) instance
 		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_ = new OSMMap('<%= portletNameSpace%>', '<%= occurenceId %>', '<%= startLatitude %>', '<%= startLongitude %>', '<%= startZoom %>');
-		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.displayMarker('<%= displayText %>', '<%= startLatitude %>', '<%= startLongitude %>');
+		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.displayPlotMarker('<%= displayText %>', '<%= startLatitude %>', '<%= startLongitude %>');
+		
+		// Add plots if available
+		<%
+		if ((plotList != null) && (plotList.size() > 0)) {
+			Iterator<GeolocalizationPlot> iter = plotList.iterator();
+			while (iter.hasNext()) {
+				GeolocalizationPlot plot = iter.next();
+				%>
+				<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.displayPlotMarker('<%= plot.getDescription() %>', '<%= plot.getLatitude() %>', '<%= plot.getLongitude() %>');
+				<%
+			}
+		}
+		%>
 		
 	</script>
 </c:if>
