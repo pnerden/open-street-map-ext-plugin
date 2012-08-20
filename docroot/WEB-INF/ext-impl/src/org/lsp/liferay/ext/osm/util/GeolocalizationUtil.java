@@ -9,6 +9,10 @@ import java.util.Map;
 import javax.xml.transform.Source;
 
 import org.lsp.liferay.ext.osm.model.GeolocalizationEntry;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.xml.xpath.Jaxp13XPathTemplate;
 import org.springframework.xml.xpath.XPathOperations;
@@ -20,12 +24,18 @@ import com.liferay.portal.json.JSONArrayImpl;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 public class GeolocalizationUtil {
 	
 	private static final String PROVIDER_SEARCH_QUERY_TEMPLATE = "http://nominatim.openstreetmap.org/search/?q={q}&format=xml&polygon=0&addressdetails=1&countrycodes=fr&limit=5";
 	private static final String PROVIDER_CACHE_NAME = "GeolocalizationEntry";
 	private static final String PROVIDER_REVERSE_SEARCH_QUERY_TEMPLATE = "http://nominatim.openstreetmap.org/reverse?format=xml&lat={lat}&lon={lon}&zoom=18&addressdetails=1";
+	
+	private static final String APPLICATION_ALL = "*/*";
+	
+	private static final Log log = LogFactoryUtil.getLog(GeolocalizationUtil.class);
 	
 	@SuppressWarnings("unchecked")
 	public static List<GeolocalizationEntry> getAsObjectByQuery(String query) {
@@ -35,11 +45,19 @@ public class GeolocalizationUtil {
 		if (MultiVMPoolUtil.get(PROVIDER_CACHE_NAME, query) != null) {
 			result = (ArrayList<GeolocalizationEntry>) MultiVMPoolUtil.get(PROVIDER_CACHE_NAME, query);
 		} else {
+			final HttpHeaders requestHeaders = new HttpHeaders();
+			requestHeaders.set("Accept", APPLICATION_ALL);
+			final HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);			
 			RestTemplate rest = new RestTemplate();
-	
+			
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("q", query);
-			Source source = rest.getForObject(PROVIDER_SEARCH_QUERY_TEMPLATE, Source.class, params);
+			
+			log.debug("Sending search query : "+query);
+			
+			final ResponseEntity<Source> responseEntity = rest.exchange(PROVIDER_SEARCH_QUERY_TEMPLATE, HttpMethod.GET, requestEntity, Source.class, params);
+			
+			Source source = responseEntity.getBody(); 
 			
 			XPathOperations xpath = new Jaxp13XPathTemplate();
 			List<Node> nodes = xpath.evaluateAsNodeList("/searchresults/place", source);
@@ -118,12 +136,17 @@ public class GeolocalizationUtil {
 		if (MultiVMPoolUtil.get(PROVIDER_CACHE_NAME, buildCacheKey(latitude,longitude)) != null) {
 			result = (GeolocalizationEntry) MultiVMPoolUtil.get(PROVIDER_CACHE_NAME, buildCacheKey(latitude,longitude));
 		} else {
+			final HttpHeaders requestHeaders = new HttpHeaders();
+			requestHeaders.set("Accept", APPLICATION_ALL);
+			final HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);	
 			RestTemplate rest = new RestTemplate();
 			
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("lat", latitude);
 			params.put("lon", longitude);
-			Source source = rest.getForObject(PROVIDER_REVERSE_SEARCH_QUERY_TEMPLATE, Source.class, params);
+						
+			final ResponseEntity<Source> responseEntity = rest.exchange(PROVIDER_REVERSE_SEARCH_QUERY_TEMPLATE, HttpMethod.GET, requestEntity, Source.class, params);
+			Source source = responseEntity.getBody();
 			
 			XPathOperations xpath = new Jaxp13XPathTemplate();
 			Element locElement = (Element) xpath.evaluateAsNode("/reversegeocode/addressparts", source);
