@@ -1,26 +1,32 @@
 var FlagIcon = L.Icon.extend({
-    iconUrl: '/html/common/leaflet/images/flag.png',
-    iconSize: new L.Point(48, 48),
-    iconAnchor: new L.Point(7, 47),
-    popupAnchor: new L.Point(0, -40)
+	options: {
+	    iconUrl: '/html/common/leaflet/images/flag.png',
+	    iconSize: new L.Point(48, 48),
+	    iconAnchor: new L.Point(7, 47),
+	    popupAnchor: new L.Point(0, -40)
+	}
 });
 
 var PlotIcon = L.Icon.extend({
-    iconUrl: '/html/common/leaflet/images/marker.png',
-    shadowUrl: '/html/common/leaflet/images/marker-shadow.png',
-    iconSize: new L.Point(25, 41),
-    shadowSize:	new L.Point(41, 41),
-    iconAnchor: new L.Point(13, 41),
-	popupAnchor: new L.Point(0, -33)
+	options: {
+	    iconUrl: '/html/common/leaflet/images/marker.png',
+	    shadowUrl: '/html/common/leaflet/images/marker-shadow.png',
+	    iconSize: new L.Point(25, 41),
+	    shadowSize:	new L.Point(41, 41),
+	    iconAnchor: new L.Point(13, 41),
+		popupAnchor: new L.Point(0, -33)
+	}
 });
 
 var SearchIcon = L.Icon.extend({
-    iconUrl: '/html/common/leaflet/images/search-marker.png',
-    shadowUrl: '/html/common/leaflet/images/marker-shadow.png',
-    iconSize: new L.Point(25, 41),
-    shadowSize:	new L.Point(41, 41),
-    iconAnchor: new L.Point(13, 41),
-	popupAnchor: new L.Point(0, -33)
+	options: {
+	    iconUrl: '/html/common/leaflet/images/search-marker.png',
+	    shadowUrl: '/html/common/leaflet/images/marker-shadow.png',
+	    iconSize: new L.Point(25, 41),
+	    shadowSize:	new L.Point(41, 41),
+	    iconAnchor: new L.Point(13, 41),
+		popupAnchor: new L.Point(0, -33)
+	}
 });
 
 OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, startZoom) {
@@ -212,7 +218,9 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 	this.updateLocationMarkerDisplay = function(latlng) {
 		locationMarker.setLatLng(latlng);
 		locationMarkerContent = this.meetupsMapReverseSearch(latlng, ", ");
-		locationMarker.bindPopup(locationMarkerContent.replace(/, /g, "<br />")).openPopup();
+		if ((locationMarkerContent != null) && (locationMarkerContent != "")) {
+			locationMarker.bindPopup(locationMarkerContent.replace(/, /g, "<br />")).openPopup();
+		}
 	};
 	
 	this.zoomTo = function (northEastLat, northEastLng, southWestLat, southWestLng) {
@@ -264,23 +272,25 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 	
 	this.buildLocationDescription = function(responseData, separator) {
 		var result = "";
-		if (responseData.road != null) {
-			result += responseData.road+separator;
-		}
-		if (responseData.zipcode != null) {
-			result += responseData.zipcode+separator;
-		}
-		if (responseData.city != null) {
-			result += responseData.city+separator;
-		}
-		if (responseData.county != null ) {
-			result += responseData.county+separator;
-		}
-		if (responseData.state != null) {
-			result += responseData.state+separator;
-		}
-		if (responseData.country != null) {
-			result += responseData.country;
+		if ((responseData != null) && (responseData != "")) {
+			if (responseData.road != null) {
+				result += responseData.road+separator;
+			}
+			if (responseData.zipcode != null) {
+				result += responseData.zipcode+separator;
+			}
+			if (responseData.city != null) {
+				result += responseData.city+separator;
+			}
+			if (responseData.county != null ) {
+				result += responseData.county+separator;
+			}
+			if (responseData.state != null) {
+				result += responseData.state+separator;
+			}
+			if (responseData.country != null) {
+				result += responseData.country;
+			}
 		}
 		return result;
 	};

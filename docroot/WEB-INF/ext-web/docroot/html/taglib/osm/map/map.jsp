@@ -34,7 +34,7 @@
 		<%
 		if (locationMarkerActive) {
 		%>
-			<p><liferay-ui:message key="doubleclick-the-map-or-drag-the-flag-to-set-location" /></p>
+			<p><liferay-ui:message key="rightclick-the-map-or-drag-the-flag-to-set-location" /></p>
 		<%
 		}
 		%>
@@ -66,8 +66,8 @@
 	<%
 	if ((locationLatitudeFieldIdBind != "") || (locationLongitudeFieldIdBind != "") || (locationZoomFieldIdBind != "")) {
 	%>
-		// Activate the event DoubleClick on the Map
-		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('dblclick', function(event) {
+		// Activate the event ContextMenu on the Map
+		<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.getMap().on('contextmenu', function(event) {
 			<%= portletNameSpace%>updateLocationDependencies(event.latlng, event);
 		});
 		
@@ -200,7 +200,7 @@
 		while (iter.hasNext()) {
 			GeolocalizationPlot plot = iter.next();
 			%>
-			<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.displayPlotMarker('<%= plot.getDescription() %>', '<%= plot.getLatitude() %>', '<%= plot.getLongitude() %>');
+			<%= portletNameSpace%>OSMMap_<%= occurenceId %>_.displayPlotMarker('<%= plot.getDescription()  %>', '<%= plot.getLatitude() %>', '<%= plot.getLongitude() %>');
 			<%
 		}
 	}
