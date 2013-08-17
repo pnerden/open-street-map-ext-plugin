@@ -192,6 +192,15 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 				on: { 
 					success: function() {
 				  		parent.meetupsMapSearchSuccess(this.get('responseData'));				  		
+					},
+					failure: function() {
+						var dialog = new A.Dialog({
+							title: 'ERROR',
+							destroyOnClode: true,
+							centered: true,
+							modal: true,
+							bodyContent: 'An error occured while trying to search the address!'
+						}).render();
 					}
 			  	} 
 			}); 
@@ -199,16 +208,18 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 	};
 	
 	this.meetupsMapSearchSuccess = function(responseData) {
-		this.clearSearchMarkers();
-		this.clearMapSuggestions();
-		for (var i=0;i<responseData.length;i++) {
-			var location = responseData[i];
-			suggestions[i] = location;
-			this.displaySearchMarker(this.buildZoomToAnchor(location, "<br />"), location.lat, location.lng);
-			this.addMapSuggestion(this.buildZoomToAnchor(location, ", "));
+		if (responseData != null) {
+			this.clearSearchMarkers();
+			this.clearMapSuggestions();
+			for (var i=0;i<responseData.length;i++) {
+				var location = responseData[i];
+				suggestions[i] = location;
+				this.displaySearchMarker(this.buildZoomToAnchor(location, "<br />"), location.lat, location.lng);
+				this.addMapSuggestion(this.buildZoomToAnchor(location, ", "));
+			}
+			var box = suggestions[0].box.split(',');
+			this.zoomTo(box[1], box[2], box[0], box[3]);
 		}
-		var box = suggestions[0].box.split(',');
-		this.zoomTo(box[1], box[2], box[0], box[3]);
 	};
 	
 	this.unbindLocationField = function() {
@@ -251,15 +262,15 @@ OSMMap = function(portletNameSpace, occurenceId, startLatitude, startLongitude, 
 	};
 	
 	this.getMapSearchField = function() {
-		return this.mapSearchField;
+		return mapSearchField;
 	};
 	
 	this.getMapSuggestionsDiv = function() {
-		return this.mapSuggestionsDiv;	
+		return mapSuggestionsDiv;	
 	};
 	
 	this.setMapSearchField = function(mapSearchFieldId) {
-		this.mapSearchField = document.getElementById(mapSearchFieldId);
+		mapSearchField = document.getElementById(mapSearchFieldId);
 	};
 	
 	this.getZoom = function() {

@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.xml.xpath.Jaxp13XPathTemplate;
 import org.springframework.xml.xpath.XPathOperations;
@@ -22,6 +23,7 @@ import org.w3c.dom.NodeList;
 
 import com.liferay.portal.json.JSONArrayImpl;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -38,7 +40,7 @@ public class GeolocalizationUtil {
 	private static final Log log = LogFactoryUtil.getLog(GeolocalizationUtil.class);
 	
 	@SuppressWarnings("unchecked")
-	public static List<GeolocalizationEntry> getAsObjectByQuery(String query) {
+	public static List<GeolocalizationEntry> getAsObjectByQuery(String query) throws SystemException {
 		
 		List<GeolocalizationEntry> result = new ArrayList<GeolocalizationEntry>();
 		
@@ -54,8 +56,8 @@ public class GeolocalizationUtil {
 			params.put("q", query);
 			
 			log.debug("Sending search query : "+query);
-			
-			final ResponseEntity<Source> responseEntity = rest.exchange(PROVIDER_SEARCH_QUERY_TEMPLATE, HttpMethod.GET, requestEntity, Source.class, params);
+			try {
+				final ResponseEntity<Source> responseEntity = rest.exchange(PROVIDER_SEARCH_QUERY_TEMPLATE, HttpMethod.GET, requestEntity, Source.class, params);
 			
 			Source source = responseEntity.getBody(); 
 			
@@ -109,13 +111,17 @@ public class GeolocalizationUtil {
 			}			
 			
 			MultiVMPoolUtil.put(PROVIDER_CACHE_NAME, query, result);
+			
+			} catch (RestClientException e) {
+				throw new SystemException(e.getMessage());
+			}
 		}
 		
 		return result;
 		
 	}
 	
-	public static JSONArray getAsJSONArrayByQuery(String query) {
+	public static JSONArray getAsJSONArrayByQuery(String query) throws SystemException {
 		List<GeolocalizationEntry> loc = getAsObjectByQuery(query);
 		Iterator<GeolocalizationEntry> iter = loc.iterator();
 		
@@ -129,7 +135,7 @@ public class GeolocalizationUtil {
 		
 	}
 	
-	public static GeolocalizationEntry getAsObjectByCoordinates(String latitude, String longitude) {
+	public static GeolocalizationEntry getAsObjectByCoordinates(String latitude, String longitude) throws SystemException {
 		
 		GeolocalizationEntry result = new GeolocalizationEntry();
 		
@@ -144,56 +150,59 @@ public class GeolocalizationUtil {
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("lat", latitude);
 			params.put("lon", longitude);
-						
-			final ResponseEntity<Source> responseEntity = rest.exchange(PROVIDER_REVERSE_SEARCH_QUERY_TEMPLATE, HttpMethod.GET, requestEntity, Source.class, params);
-			Source source = responseEntity.getBody();
-			
-			XPathOperations xpath = new Jaxp13XPathTemplate();
-			Element locElement = (Element) xpath.evaluateAsNode("/reversegeocode/addressparts", source);
-			NodeList list = locElement.getChildNodes();
-			
-			result.setLatitude(latitude);
-			result.setLongitude(longitude);
-			
-			for (int i=0; i < list.getLength(); i++) {
-				Node subnode = list.item(i);
 				
-				if (subnode.getNodeName() == "road") {
-					result.setRoad(subnode.getTextContent());
-				}
+			try {
+				final ResponseEntity<Source> responseEntity = rest.exchange(PROVIDER_REVERSE_SEARCH_QUERY_TEMPLATE, HttpMethod.GET, requestEntity, Source.class, params);
+				Source source = responseEntity.getBody();
 				
-				if (subnode.getNodeName() == "city") {
-					result.setCity(subnode.getTextContent());
-				}
+				XPathOperations xpath = new Jaxp13XPathTemplate();
+				Element locElement = (Element) xpath.evaluateAsNode("/reversegeocode/addressparts", source);
+				NodeList list = locElement.getChildNodes();
 				
-				if (subnode.getNodeName() == "city_district") {
-					result.setCity_district(subnode.getTextContent());
-				}
+				result.setLatitude(latitude);
+				result.setLongitude(longitude);
 				
-				if (subnode.getNodeName() == "county") {
-					result.setCounty(subnode.getTextContent());
+				for (int i=0; i < list.getLength(); i++) {
+					Node subnode = list.item(i);
+					
+					if (subnode.getNodeName() == "road") {
+						result.setRoad(subnode.getTextContent());
+					}
+					
+					if (subnode.getNodeName() == "city") {
+						result.setCity(subnode.getTextContent());
+					}
+					
+					if (subnode.getNodeName() == "city_district") {
+						result.setCity_district(subnode.getTextContent());
+					}
+					
+					if (subnode.getNodeName() == "county") {
+						result.setCounty(subnode.getTextContent());
+					}
+					
+					if (subnode.getNodeName() == "state") {
+						result.setState(subnode.getTextContent());
+					}
+					
+					if (subnode.getNodeName() == "postcode") {
+						result.setZipcode(subnode.getTextContent());
+					}
+					
+					if (subnode.getNodeName() == "country") {
+						result.setCountry(subnode.getTextContent());
+					}
 				}
-				
-				if (subnode.getNodeName() == "state") {
-					result.setState(subnode.getTextContent());
-				}
-				
-				if (subnode.getNodeName() == "postcode") {
-					result.setZipcode(subnode.getTextContent());
-				}
-				
-				if (subnode.getNodeName() == "country") {
-					result.setCountry(subnode.getTextContent());
-				}
+			} catch (RestClientException e) {
+				throw new SystemException(e.getMessage());
 			}
-			
 		}
 		
 		return result;
 		
 	}
 		
-	public static JSONObject getAsJSONObjectByCoordinates(String latitude, String longitude) {
+	public static JSONObject getAsJSONObjectByCoordinates(String latitude, String longitude) throws SystemException {
 		return getAsObjectByCoordinates(latitude, longitude).toJSONObject();
 	}
 		

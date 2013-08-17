@@ -45,18 +45,30 @@ public class OSMJSONServlet extends HttpServlet {
 		
 	}
 	
-	private void searchMap(String query, HttpServletResponse resp)	throws IOException {
-		PrintWriter out = resp.getWriter();
-		out.write(GeolocalizationUtil.getAsJSONArrayByQuery(query).toString());
-		out.flush();
-        out.close();
+	private void searchMap(String query, HttpServletResponse resp) throws IOException {
+		try {
+			PrintWriter out = resp.getWriter();		
+			out.write(GeolocalizationUtil.getAsJSONArrayByQuery(query).toString());
+			out.flush();
+	        out.close();
+		} catch (SystemException e) {
+			resp.sendError(500);
+		} catch (IOException e) {
+			resp.sendError(500);
+		}
 	}
 	
 	private void searchMap(String latitude, String longitude, HttpServletResponse resp) throws IOException {
-		PrintWriter out = resp.getWriter();
-		out.write(GeolocalizationUtil.getAsJSONObjectByCoordinates(latitude, longitude).toString());
-		out.flush();
-        out.close();
+		try {
+			PrintWriter out = resp.getWriter();
+			out.write(GeolocalizationUtil.getAsJSONObjectByCoordinates(latitude, longitude).toString());
+			out.flush();
+	        out.close();
+		} catch (SystemException e) {
+			resp.sendError(500);
+		} catch (IOException e) {
+			resp.sendError(500);
+		}
 	}
 	
 }
